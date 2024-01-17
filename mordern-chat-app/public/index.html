@@ -2,42 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <!-- <link rel="shortcut icon" href="favicon.ico" type="data:image/png;base64,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"> -->
+    <title>Chat Application</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    
+    <script src="https://kit.fontawesome.com/f2dc5cead4.js" crossorigin="anonymous"></script>
   </body>
 </html>
