@@ -2,11 +2,12 @@ import React from 'react'
 
 const Icon = ({
     icon="",
-    classname=""
+    classname="",
+    onclick
 }) => {
   return (
     <>
-     <i className={`fa-solid fa-${icon} ${classname} `} ></i> 
+     <i className={`fa-solid fa-${icon} ${classname} `} onClick={onclick} ></i> 
     </>
   )
 }
