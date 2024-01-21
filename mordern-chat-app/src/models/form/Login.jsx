@@ -1,10 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState , useContext } from 'react'
+import ChatContext from '../../Context/ChatContext'
 import Icon from '../../Componets/Icon'
 import { useNavigate } from 'react-router-dom'
 
 const Login = ({
-    isSignIn = true
+    isSignIn = false
 }) => {
+
+    const context = useContext(ChatContext)
+    const { Login } = context
+
+    const [ data, setData ]  = useState({
+        ...(!isSignIn && {
+            name: ""
+        }),
+        email: "",
+        password:""
+    })
 
     const navigate = useNavigate()
     
@@ -23,25 +35,34 @@ const Login = ({
             console.log(err.message)
         }
     }
+
+    const handleForm = async (e) =>{
+        e.preventDefault()
+        if(!isSignIn){
+            Login(data,false)
+        }else{
+            Login(data,true)
+        }
+    }
   return (
     <>
     <div className=" h-screen w-screen flex flex-col justify-center items-center">
-        <form action="" className='flex flex-col w-[40%] h-[60%] justify-center items-center bg-[#ffffff7c] rounded-xl shadow-md'>
+        <form onSubmit={(e)=>handleForm(e)} className='flex flex-col w-[40%] h-[60%] justify-center items-center bg-[#ffffff7c] rounded-xl shadow-md'>
         <h1 className='text-2xl font-extrabold'>{isSignIn ? "Login" : "SignUp"}</h1>
             {
                 !isSignIn && 
                     <div className='mt-3 bg-white rounded-xl p-3 shadow-lg w-[50%]'>
                         <label htmlFor="Username" className='mx-[10px] cursor-pointer text-md'><Icon icon='user' /></label>
-                        <input type="text" name="Username" id="Username" placeholder='Username' className='border-none outline-none' />
+                        <input type="text" name="Username" id="Username" value={data.name} onChange={(e)=>{setData({...data, name:e.target.value})}} placeholder='Username' className='border-none outline-none' />
                     </div>
             }
             <div className='mt-3 bg-white rounded-xl p-3 shadow-lg w-[50%]'>
                 <label htmlFor="email" className='mx-[10px] cursor-pointer text-md'><Icon icon='envelope' /></label>
-                <input type="email" name="email" id="email" placeholder='Email' className='border-none outline-none' />
+                <input type="email" name="email" id="email" value={data.email} onChange={(e)=>{setData({...data,email:e.target.value})}} placeholder='Email' className='border-none outline-none' />
             </div>
             <div className='mt-3 bg-white rounded-xl p-3 shadow-lg w-[50%]'>
                 <label htmlFor="password" className='mx-[10px] cursor-pointer text-md'><Icon icon={`lock`} /></label>
-                <input type={password} placeholder='Password' name="password" id="password" className='border-none outline-none' />
+                <input type={password} placeholder='Password' value={data.password} onChange={(e)=>{setData({...data, password:e.target.value})}} name="password" id="password" className='border-none outline-none' />
                 <Icon icon={eye} onclick={()=>setPass()} />
             </div>
             <input type="submit" value="Submit" className='mt-4 bg-blue-600 p-2 px-4 rounded-xl cursor-pointer hover:bg-blue-300'/>

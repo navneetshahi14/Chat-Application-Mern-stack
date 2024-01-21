@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 
 // Connection database
 const mondata = require('./db/db')
@@ -7,10 +8,11 @@ mondata()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false}))
+app.use(cors())
 
 
 const AuthRouter = require('./router/AuthRouter')
-app.use('/api',AuthRouter)
+app.use('/auth',AuthRouter)
 
 const converRouter = require('./router/conversationRouter')
 app.use('/api',converRouter)

@@ -2,6 +2,8 @@ const User = require('../model/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+
+
 const securePassword = async (password) =>{
     try{
 
@@ -35,8 +37,26 @@ const newUser = async(req,res) =>{
                     password:password
                 })
 
-                await registerUser.save()
-                res.status(200).send('User registered successfully')
+                const registerDone = await registerUser.save()
+                console.log(registerDone)
+
+                if(registerDone){
+                    const payload = {
+                        userId :registerDone._id,
+                        email :registerDone.email
+                    }
+                    const JWT_SECRET_KEY = process.env.JWT_SECERT_KEY || "RiteshkesahaibhaiGalliKamdeyrmc"
+                    jwt.sign(payload,JWT_SECRET_KEY,{expiresIn:86400},async(err,token)=>{
+                        await registerDone.updateOne({_id:registerDone._id},{
+                            $set:{ token }
+                        })
+                        await registerDone.save()
+                        return res.status(200).json({ userFind: {id:registerDone._id, email:registerDone.email, name:registerDone.name}, token: token })
+                    })
+                }
+                console.log(registerDone)
+
+                // res.status(200).send('User registered successfully')
             }
         }
         
@@ -70,7 +90,7 @@ const login = async(req,res) =>{
                         $set:{ token }
                     })
                     await findUser.save()
-                    return res.status(200).json({ userFind: {id:findUser._id, email:findUser.email, fullName:findUser.fullName}, token: token })
+                    return res.status(200).json({ userFind: {id:findUser._id, email:findUser.email, name:findUser.name}, token: token })
                 })
             }
         }

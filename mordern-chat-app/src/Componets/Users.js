@@ -3,7 +3,7 @@ import Avatar from '../assets/avatar-boy-svgrepo-com.svg'
 
 const Users = ({
     name="",
-    click= () =>{}
+    click =()=>{}
 }) => {
   return (
     <>

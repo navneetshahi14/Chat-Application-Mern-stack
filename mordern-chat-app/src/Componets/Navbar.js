@@ -2,26 +2,29 @@ import React from "react";
 import Icon from "./Icon";
 
 const Navbar = () => {
+
+
   return (
     <>
       <div className=" flex flex-col h-[80%] bg-violet-800 w-[15%] mx-5 rounded-xl items-center">
-        <Icon icon={`star`} classname={`mt-5 text-xl hover:text-white`} />
+        <Icon icon={`star`} classname={`mt-5 text-xl cursor-pointer hover:text-white`} />
         <div className="w-full flex flex-col m-auto justify-center items-center ">
           <Icon
             icon={`envelope`}
-            classname={`mt-5 text-xl hover:text-orange-500`}
+            classname={`mt-5 text-xl cursor-pointer hover:text-orange-500`}
           />
           <Icon
-            icon={`message`}
-            classname={`mt-5 text-xl hover:text-orange-500`}
+            icon={`people-group`}
+            classname={`mt-5 text-xl cursor-pointer hover:text-orange-500`}
           />
           <Icon
             icon={`bell`}
-            classname={`mt-5 text-xl hover:text-orange-500`}
+            classname={`mt-5 text-xl cursor-pointer hover:text-orange-500`}
           />
           <Icon
-            icon={`trash`}
-            classname={`mt-5 text-xl hover:text-orange-500`}
+            icon={`plus`}
+            classname={`mt-5 text-xl cursor-pointer hover:text-orange-500`}
+            navigates={`findfriends`}
           />
         </div>
         <Icon

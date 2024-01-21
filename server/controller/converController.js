@@ -8,10 +8,16 @@ const conversation = async(req,res) =>{
     try{
 
         const { senderId , receiverId } = req.body
-        const NewConvers = new converId({ members: [senderId , receiverId]})
-        await NewConvers.save()
-        res.status(200).send('New Conversation Created')
+        const findConver = await converId.findOne({ members : { $all: [senderId , receiverId]}})
 
+        if(!findConver){
+            const NewConvers = new converId({ members: [senderId , receiverId]})
+            await NewConvers.save()
+            res.status(200).send('New Conversation Created')
+        }else{
+            res.status(300).send('Conversation exist')
+            console.log('exist')
+        }
     }catch(err){
         console.log(err.message)
     }
@@ -97,9 +103,14 @@ const userdetails = async(req,res) =>{
     try{
 
         const userId = req.params.userId
-        const userFind = await User.findById({_id:  { $ne : userId } })
-        const userData = Promise.all(userFind.map((user)=>{
-            return { user: { email:user.email, name: user.name , receiverId:user._id } }
+        const userFind = await User.find({_id :  { $ne : userId } })
+        const userData = Promise.all(userFind.map(async(user)=>{
+            const findConver = await converId.find({members : { $all : [userId,user._id] }})
+            if(!findConver){
+                return { user: { email:user.email, name: user.name , receiverId:user._id } }
+            }else{
+                console.log('conversation exist')
+            }
         }))
 
         res.status(200).json(await userData)

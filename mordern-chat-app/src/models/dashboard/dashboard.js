@@ -1,17 +1,31 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Navbar from '../../Componets/Navbar'
 import SearchBar from '../../Componets/SearchBar'
 import Contact from '../../Componets/Contact'
 import Receiver from '../../Componets/Receiver'
 import Chatbox from '../../Componets/Chatbox'
 import Messagebox from '../../Componets/messagebox'
+// import ChatState from '../../Context/chatState'
+import Chatcontext from '../../Context/ChatContext'
+import NewUser from '../../Componets/NewUser'
+
 // import Switch from "react-switch";
 
 
 
-const Dashboard = () => {
+const Dashboard = ({
+  isContact = false
+}) => {
+
+  const context = useContext(Chatcontext)
+  const { user , others, otherUsers } = context
+
 
   const [show,setShow ] = useState("hidden")
+
+  if(!isContact){
+    otherUsers()
+  }
 
   const chatbox = () =>{
     try{
@@ -32,12 +46,14 @@ const Dashboard = () => {
                <Navbar />
                <div className=' h-[100%] w-[85%]'>
                 <SearchBar />
-                <Contact onclick={()=>chatbox()} />
+                {
+                  isContact ? <Contact onclick={()=>chatbox()} /> : <NewUser contact={others} />
+                }
                </div>
             </div>
 
             <div className={`h-screen ${show} flex-col w-[65%] items-center`}>
-              <Receiver />
+              <Receiver name={user.name} />
               {/* <Switch onChange={()=>console.log('hello')}/> */}
               <Chatbox />
               <Messagebox />
