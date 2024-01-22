@@ -8,15 +8,20 @@ const conversation = async(req,res) =>{
     try{
 
         const { senderId , receiverId } = req.body
-        const findConver = await converId.findOne({ members : { $all: [senderId , receiverId]}})
+        const findConver = await converId.find({ members : { $all: [senderId , receiverId]}})
+        console.log(findConver)
 
-        if(!findConver){
-            const NewConvers = new converId({ members: [senderId , receiverId]})
-            await NewConvers.save()
-            res.status(200).send('New Conversation Created')
-        }else{
+        if(findConver.length > 0){
             res.status(300).send('Conversation exist')
             console.log('exist')
+        }else{
+            if(receiverId !== null){
+                const NewConvers = new converId({ members: [ senderId , receiverId ]})
+                await NewConvers.save()
+                res.status(200).send('New Conversation Created')
+            }else{
+                console.log('sorry bhai')
+            }
         }
     }catch(err){
         console.log(err.message)
@@ -31,8 +36,9 @@ const conversDisplay = async(req,res)=>{
         const conversation = await converId.find({ members : { $in : [userId] } })
         const conversationUserData = Promise.all(conversation.map(async(conversations)=>{
             const receiverId = conversations.members.find((member) => member !== userId )
-            const user = await User.find(receiverId)
-            return { user: { receiverId: user._id , email:user.email , fullName:user.fullName }, conversationId:conversations._id }
+            const user = await User.findById(receiverId)
+
+            return { user: { receiverId: user._id , email:user.email , name:user.name }, conversationId:conversations._id }
         }))
 
         res.status(200).send(await conversationUserData)
@@ -104,13 +110,9 @@ const userdetails = async(req,res) =>{
 
         const userId = req.params.userId
         const userFind = await User.find({_id :  { $ne : userId } })
+        console.log(userFind)
         const userData = Promise.all(userFind.map(async(user)=>{
-            const findConver = await converId.find({members : { $all : [userId,user._id] }})
-            if(!findConver){
-                return { user: { email:user.email, name: user.name , receiverId:user._id } }
-            }else{
-                console.log('conversation exist')
-            }
+            return { user: { email:user.email, name: user.name , receiverId:user._id } }
         }))
 
         res.status(200).json(await userData)

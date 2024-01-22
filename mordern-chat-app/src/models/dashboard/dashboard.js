@@ -18,14 +18,11 @@ const Dashboard = ({
 }) => {
 
   const context = useContext(Chatcontext)
-  const { user , others, otherUsers } = context
+  const { user , others } = context
 
 
   const [show,setShow ] = useState("hidden")
 
-  if(!isContact){
-    otherUsers()
-  }
 
   const chatbox = () =>{
     try{

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Icon from "./Icon";
+import Chatcontext from "../Context/ChatContext";
 
 const Navbar = () => {
 
-
-  return (
+  const context = useContext(Chatcontext)
+  const { otherUsers } = context
+   return (
     <>
       <div className=" flex flex-col h-[80%] bg-violet-800 w-[15%] mx-5 rounded-xl items-center">
         <Icon icon={`star`} classname={`mt-5 text-xl cursor-pointer hover:text-white`} />
@@ -25,6 +27,7 @@ const Navbar = () => {
             icon={`plus`}
             classname={`mt-5 text-xl cursor-pointer hover:text-orange-500`}
             navigates={`findfriends`}
+            func={()=>otherUsers()}
           />
         </div>
         <Icon

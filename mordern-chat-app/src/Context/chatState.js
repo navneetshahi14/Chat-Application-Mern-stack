@@ -12,6 +12,7 @@ const ChatState = (props) => {
   // eslint-disable-next-line no-unused-vars
   const [user,setUser] = useState(JSON.parse(localStorage.getItem('user:detail')))
   const [others, setOthers] = useState([])
+  const [conver , setConver] = useState([])
 
     const Login = async (data,isSignIn) =>{
       try{
@@ -41,19 +42,25 @@ const ChatState = (props) => {
     }
 
     // getting other users
-    // useEffect(()=>{
-    //   const otherUsers = async() =>{
-    //     const res  = await fetch(`${host}/api/user/${user?.id}`,{
-    //       method:"GET",
-    //       headers:{
-    //         'Content-Type':"application/json"
-    //       }
-    //     })
-    //     const resData = await res.json()
-    //     setOthers(resData)
-    //   }
-    //   // otherUsers()
-    // })
+    useEffect(()=>{
+      const conversationDisplay = async() =>{
+        try{
+  
+          const res = await fetch(`${host}/api/conversation/${user?.id}`,{
+            method:"GET",
+            headers:{
+              'Content-Type':"application/json"
+            }
+          })
+          const resData = await res.json()
+          setConver(resData)
+  
+        }catch(err){
+          console.log(err.message)
+        }
+      }
+      conversationDisplay()
+    })
 
     const otherUsers = async() =>{
       const res  = await fetch(`${host}/api/user/${user?.id}`,{
@@ -64,6 +71,7 @@ const ChatState = (props) => {
       })
       const resData = await res.json()
       setOthers(resData)
+      console.log(others)
     }
 
     const createNewConversation = async(receiverId) =>{
@@ -88,8 +96,11 @@ const ChatState = (props) => {
     }
 
 
+    
+
+
   return (
-    <Chatcontext.Provider value={{ Login , user , others , createNewConversation , otherUsers }} >
+    <Chatcontext.Provider value={{ Login , user , others , createNewConversation , otherUsers , conver}} >
         {props.children}
     </Chatcontext.Provider>
   )
